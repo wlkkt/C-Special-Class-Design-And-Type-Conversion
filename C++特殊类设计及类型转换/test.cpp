@@ -204,3 +204,59 @@ int main()
 	return 0;
 }
 
+
+#include<iostream>
+#include<vector>
+#include<list>
+#include<string>
+using namespace std;
+
+//int main()
+//{
+//	ostream out(nullptr);
+//	ostream copy(out);
+//
+//	return 0;
+//}
+
+// 只能在堆上
+//class HeapOnly
+//{
+//public:
+//	template<class... Args>
+//	static HeapOnly* CreateObj(Args&&... args)
+//	{
+//		return new HeapOnly(args...);
+//	}
+//
+//	HeapOnly(const HeapOnly&) = delete;
+//	HeapOnly& operator=(const HeapOnly&) = delete;
+//private:
+//	// 构造私有化
+//	HeapOnly()
+//	{}
+//
+//	HeapOnly(int x, int y)
+//		:_x(x)
+//		,_y(y)
+//	{}
+//
+//	int _x;
+//	int _y;
+//	vector<int> _a;
+//};
+//
+//int main()
+//{
+//	//HeapOnly ho1;
+//	//HeapOnly* ho2 = new HeapOnly;
+//
+//	HeapOnly* ho3 = HeapOnly::CreateObj();
+//	HeapOnly* ho4 = HeapOnly::CreateObj(1,1);
+//
+//	//HeapOnly copy(*ho3);
+//
+//	return 0;
+//}
+
+
