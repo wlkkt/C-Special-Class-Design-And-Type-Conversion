@@ -321,3 +321,100 @@ int main()
 	// 单参数的构造函数，支持内置类型隐式转换成自定义类型
 	/*string s1 = "111111";
 	const string& s2 = "11111";*/
+
+
+	int main()
+	{
+		// 建议规范，但是以前的还能用。对应隐式类型转换
+		double d = 12.34;
+		int a1 = static_cast<int>(d);
+		cout << a1 << endl;
+	
+		int a2 = d;
+		cout << a2 << endl;
+	
+		return 0;
+	}
+
+	int main()
+	{
+		double d = 12.34;
+		int a = static_cast<int>(d);
+		cout << a << endl;
+	
+		// 对应的是以前的强制类型转换
+		// int* p = static_cast<int*>(a); 报错
+		int* p = reinterpret_cast<int*>(a);
+		cout << p << endl;
+	
+		// 15:40
+		// 强制类型转换，但是为什么要把去掉const属性单独拿出来
+		// 就是专门提醒，去掉const属性是有一些内存可见优化的的风险，要注意是否加了volatile
+		volatile const int a1 = 2;
+		//int* p1 = (int*)&a1;
+		int* p1 = const_cast<int*>(&a1);
+		*p1 = 3;
+		cout << a1 << endl;
+		cout << *p1 << endl;
+	
+		return 0;
+	}
+
+class A
+{
+public:
+	virtual void f() {}
+
+	int _a = 0;
+};
+
+class B : public A
+{
+public:
+	int _b = 1;
+};
+
+void fun(A* pa)
+{
+	 向下转换：父->子
+	 pa指向子类对象，转回子类，是安全的
+	 pa指向父类对象，转回子类，是不安全的，存在越界的风险问题
+
+	 不安全
+	B* pb = (B*)pa;
+
+	  pa指向子类对象，转回子类，正常转换
+	  pa指向父类对象，转回子类，转换失败
+	B* pb = dynamic_cast<B*>(pa);
+	if (pb)
+	{
+		cout << pb << endl;
+		cout << pb->_a << endl;
+		cout << pb->_b << endl;
+	}
+	else
+	{
+		cout << "转换失败" << endl;
+	}
+}
+
+int main()
+{
+	A a;
+	B b;
+
+	fun(&a);
+	fun(&b);
+
+	return 0;
+}
+
+int main()
+{
+	// 赋值兼容，向上转换，子->父
+	B bb;
+	A aa = bb;
+	A* ptr = &bb;
+
+	return 0;
+}
