@@ -297,124 +297,156 @@
 #include <iostream>
 using namespace std;
 
-class A
-{
-public:
-	operator int()
-	{
-		return _a1 + _a2;
-	}
-private:
-	int _a1 = 1;
-	int _a2 = 2;
-};
-
-int main()
-{
-	A aa;
-	int a = aa;
-	int b = (int)aa;
-	cout << a << endl;
-	cout << b << endl;
-	return 0;
-}
+//class A
+//{
+//public:
+//	operator int()
+//	{
+//		return _a1 + _a2;
+//	}
+//private:
+//	int _a1 = 1;
+//	int _a2 = 2;
+//};
+//
+//int main()
+//{
+//	A aa;
+//	int a = aa;
+//	int b = (int)aa;
+//	cout << a << endl;
+//	cout << b << endl;
+//	return 0;
+//}
 	// 单参数的构造函数，支持内置类型隐式转换成自定义类型
 	/*string s1 = "111111";
 	const string& s2 = "11111";*/
 
 
-	int main()
-	{
-		// 建议规范，但是以前的还能用。对应隐式类型转换
-		double d = 12.34;
-		int a1 = static_cast<int>(d);
-		cout << a1 << endl;
-	
-		int a2 = d;
-		cout << a2 << endl;
-	
-		return 0;
-	}
+//int main()
+//{
+//	//C++的隐式类型转换：明显
+//	double d = 12.34;
+//	int a1 = static_cast<int>(d);
+//	cout << a1 << endl;
+//	
+//	//C语言的隐式类型转换：不明显
+//	int a2 = d;
+//	cout << a2 << endl;
+//	
+//	return 0;
+//}
 
-	int main()
-	{
-		double d = 12.34;
-		int a = static_cast<int>(d);
-		cout << a << endl;
-	
-		// 对应的是以前的强制类型转换
-		// int* p = static_cast<int*>(a); 报错
-		int* p = reinterpret_cast<int*>(a);
-		cout << p << endl;
+//int main()
+//{
+//	int a = 12;
+//	// int* p = static_cast<int*>(a); 报错,int和int*不是两个相关的类型
+//	int* p = reinterpret_cast<int*>(a);
+//	cout << p << endl;
+//	return 0;
+//}
+
+//
+//int main()
+//{
+//	const int a = 10;
+//
+//	int* p = const_cast<int*>(&a); // 去除const属性
+//	*p = 20; // 尝试修改值
+//	cout << a << endl;//a == 10
+//	cout << *p << endl;//*p == 20
+//	return 0;
+//}
+
+////测试各个变量在内存中的分区位置
+//const int c = 10;
+//static int f = 10;
+//static const int d = 10;
+//
+//int main()
+//{
+//	int a = 10;
+//	const int b = 10;
+//	static const  int e = 10;
+//	cout << &a << endl;
+//	cout << &b << endl;
+//	cout << &c << endl;
+//	cout << &d << endl;
+//	cout << &e << endl;
+//	return 0;
+//}
 	
 
-		// 强制类型转换，但是为什么要把去掉const属性单独拿出来
-		// 就是专门提醒，去掉const属性是有一些内存可见优化的的风险，要注意是否加了volatile
-		volatile const int a1 = 2;
-		//int* p1 = (int*)&a1;
-		int* p1 = const_cast<int*>(&a1);
-		*p1 = 3;
-		cout << a1 << endl;
-		cout << *p1 << endl;
-	
-		return 0;
-	}
+
+
 
 class A
 {
 public:
 	virtual void f() {}
-
-	int _a = 0;
 };
 
 class B : public A
-{
-public:
-	int _b = 1;
-};
+{};
 
-void fun(A* pa)
-{
-	// 向下转换：父->子
-	// pa指向子类对象，转回子类，是安全的
-	// pa指向父类对象，转回子类，是不安全的，存在越界的风险问题
-
-	// 不安全
-	//B* pb = (B*)pa;
-
-	//  pa指向子类对象，转回子类，正常转换
-	//  pa指向父类对象，转回子类，转换失败
-	B* pb = dynamic_cast<B*>(pa);
-	if (pb)
-	{
-		cout << pb << endl;
-		cout << pb->_a << endl;
-		cout << pb->_b << endl;
-	}
-	else
-	{
-		cout << "转换失败" << endl;
-	}
-}
 
 int main()
 {
-	A a;
-	B b;
-
-	fun(&a);
-	fun(&b);
-
-	return 0;
-}
-
-int main()
-{
-	// 赋值兼容，向上转换，子->父
+	// 赋值兼容，向上转换，子->父，不涉及类型转换
 	B bb;
-	A aa = bb;
+	A aa = bb;//利用了切片
 	A* ptr = &bb;
 
 	return 0;
 }
+
+
+
+//void fun(A* pa)
+//{
+//	// 向下转换：父->子
+//	// pa指向子类对象，转回子类，是安全的
+//	// pa指向父类对象，转回子类，是不安全的，存在越界的风险问题
+//
+//	// 不安全
+//	//B* pb = (B*)pa;
+//
+//	//  pa指向子类对象，转回子类，正常转换
+//	//  pa指向父类对象，转回子类，转换失败
+//	B* pb = dynamic_cast<B*>(pa);
+//	if (pb)
+//	{
+//		cout << pb << endl;
+//		cout << pb->_a << endl;
+//		cout << pb->_b << endl;
+//	}
+//	else
+//	{
+//		cout << "转换失败" << endl;
+//	}
+//}
+//
+//int main()
+//{
+//	A a;
+//	B b;
+//
+//	fun(&a);
+//	fun(&b);
+//
+//	return 0;
+//}
+//
+//int main()
+//{
+//	// 赋值兼容，向上转换，子->父
+//	B bb;
+//	A aa = bb;
+//	A* ptr = &bb;
+//
+//	return 0;
+//}
+//
+//
+
+
