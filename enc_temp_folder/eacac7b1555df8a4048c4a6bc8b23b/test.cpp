@@ -381,6 +381,8 @@ using namespace std;
 #include <iostream>
 using namespace std;
 
+#include <iostream>
+
 class A {
 public:
     int baseData;
