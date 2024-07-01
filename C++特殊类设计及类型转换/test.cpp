@@ -378,37 +378,88 @@ using namespace std;
 	
 
 
+//#include <iostream>
+//using namespace std;
+//
+//class A {
+//public:
+//    int baseData;
+//    A() : baseData(0) {}
+//    A(int data) : baseData(data) {}
+//};
+//
+//class B : public A {
+//public:
+//    B() {};
+//
+//    // 自定义构造函数，实现基类到派生类的转换
+//    B(const A& a) : A(a) {
+//        cout << "hello" << endl;
+//     }
+//
+//    // 自定义赋值运算符，实现基类到派生类的转换
+//    B& operator=(const A& a) {
+//        cout << "world" << endl;
+//        return *this;
+//    }
+//};
+//int main() {
+//    A aaa(10);
+//    B bbb;
+//
+//    bbb = aaa;  // 使用自定义赋值运算符
+//    B bbb2 = aaa;  // 使用自定义构造函数
+//    return 0;
+//}
+
+
 #include <iostream>
 using namespace std;
 
-class A {
+class A
+{
 public:
-    int baseData;
-    A() : baseData(0) {}
-    A(int data) : baseData(data) {}
+	virtual void f() {}
+
+	int _a = 0;
 };
 
-class B : public A {
+class B : public A
+{
 public:
-    B() {};
-
-    // 自定义构造函数，实现基类到派生类的转换
-    B(const A& a) : A(a) {
-        cout << "hello" << endl;
-     }
-
-    // 自定义赋值运算符，实现基类到派生类的转换
-    B& operator=(const A& a) {
-        cout << "world" << endl;
-        return *this;
-    }
+	int _b = 1;
 };
 
-int main() {
-    A aaa(10);
-    B bbb;
+void fun(A* pa)
+{
+	// 向下转换：父->子
+	// pa原来指向子类对象，转回子类，是安全的
+	// pa原来指向父类对象，转回子类，是不安全的，存在越界的风险问题
 
-    bbb = aaa;  // 使用自定义赋值运算符
-    B bbb2 = aaa;  // 使用自定义构造函数
-    return 0;
+	// 不安全
+	//B* pb = (B*)pa;
+
+	//  pa原来指向子类对象，转回子类，正常转换
+	//  pa原来指向父类对象，转回子类，转换失败
+	B* pb = dynamic_cast<B*>(pa);
+	if (pb)
+	{
+		cout << pb << endl;
+		cout << pb->_a << endl;
+		cout << pb->_b << endl;
+	}
+	else
+	{
+		cout << "转换失败" << endl;
+	}
+}
+
+int main()
+{
+	A a;
+	B b;
+
+	fun(&a);//父类转为子类
+	fun(&b);//子类转为子类
+	return 0;
 }
